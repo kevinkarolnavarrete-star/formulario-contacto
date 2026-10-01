@@ -151,13 +151,14 @@
             <h2>Contáctanos</h2>
             <form id="contactForm" onsubmit="enviarWhatsApp(event)">
                 
-                <!-- Nombre: Solo permite letras y espacios con una expresión regular -->
+                <!-- Nombre: Solo letras y máximo 20 caracteres -->
                 <div class="input-group">
-                    <label for="nombre">Nombre (Solo letras):</label>
-                    <input type="text" id="nombre" required placeholder="Tu nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo se permiten letras y espacios">
+                    <label for="nombre">Nombre (Máximo 20 letras):</label>
+                    <input type="text" id="nombre" required placeholder="Tu nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo se permiten letras y espacios" maxlength="20" oninput="actualizarContadorNombre()">
+                    <span id="contadorNombre" class="counter">20 caracteres restantes</span>
                 </div>
 
-                <!-- Teléfono: Solo acepta números -->
+                <!-- Teléfono: Solo acepta números (10 dígitos) -->
                 <div class="input-group">
                     <label for="telefono">Teléfono (Solo números):</label>
                     <input type="tel" id="telefono" required placeholder="10 dígitos" pattern="[0-9]+" title="Solo se permiten números" maxlength="10">
@@ -166,8 +167,8 @@
                 <!-- Comentario: Limitado a máximo 20 caracteres -->
                 <div class="input-group">
                     <label for="comentario">Comentario (Máximo 20 caracteres):</label>
-                    <textarea id="comentario" rows="2" required placeholder="Escribe tu mensaje..." maxlength="20" oninput="actualizarContador()"></textarea>
-                    <span id="contadorCaracteres" class="counter">20 / 20</span>
+                    <textarea id="comentario" rows="2" required placeholder="Escribe tu mensaje..." maxlength="20" oninput="actualizarContadorComentario()"></textarea>
+                    <span id="contadorComentario" class="counter">20 caracteres restantes</span>
                 </div>
 
                 <!-- CAPTCHA Matemático Simple -->
@@ -189,10 +190,18 @@
     </div>
 
     <script>
-        // Contador en tiempo real para los comentarios
-        function actualizarContador() {
+        // Contador en tiempo real para el Nombre
+        function actualizarContadorNombre() {
+            const nombre = document.getElementById('nombre');
+            const contador = document.getElementById('contadorNombre');
+            const restantes = 20 - nombre.value.length;
+            contador.innerText = restantes + " caracteres restantes";
+        }
+
+        // Contador en tiempo real para los Comentarios
+        function actualizarContadorComentario() {
             const comentario = document.getElementById('comentario');
-            const contador = document.getElementById('contadorCaracteres');
+            const contador = document.getElementById('contadorComentario');
             const restantes = 20 - comentario.value.length;
             contador.innerText = restantes + " caracteres restantes";
         }
@@ -231,6 +240,9 @@
             window.open(urlWhatsApp, '_blank');
         }
     </script>
+
+</body>
+</html>
 
 </body>
 </html>
