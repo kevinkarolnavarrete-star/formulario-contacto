@@ -79,6 +79,14 @@
             border-color: #667eea;
         }
 
+        .counter {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+            margin-top: 3px;
+            display: block;
+        }
+
         .captcha-box {
             background: #f0f3ff;
             padding: 12px;
@@ -101,7 +109,7 @@
         }
 
         .btn-whatsapp {
-            background-color: #aaecc2;
+            background-color: #25d366;
             color: white !important;
             border: none;
             width: 100%;
@@ -142,19 +150,24 @@
         <div class="form-section">
             <h2>Contáctanos</h2>
             <form id="contactForm" onsubmit="enviarWhatsApp(event)">
+                
+                <!-- Nombre: Solo permite letras y espacios con una expresión regular -->
                 <div class="input-group">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" required placeholder="Tu nombre completo">
+                    <label for="nombre">Nombre (Solo letras):</label>
+                    <input type="text" id="nombre" required placeholder="Tu nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo se permiten letras y espacios">
                 </div>
 
+                <!-- Teléfono: Solo acepta números -->
                 <div class="input-group">
-                    <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" required placeholder="Tu número de teléfono">
+                    <label for="telefono">Teléfono (Solo números):</label>
+                    <input type="tel" id="telefono" required placeholder="10 dígitos" pattern="[0-9]+" title="Solo se permiten números" maxlength="10">
                 </div>
 
+                <!-- Comentario: Limitado a máximo 20 caracteres -->
                 <div class="input-group">
-                    <label for="comentario">Comentario:</label>
-                    <textarea id="comentario" rows="3" required placeholder="Escribe tu mensaje..."></textarea>
+                    <label for="comentario">Comentario (Máximo 20 caracteres):</label>
+                    <textarea id="comentario" rows="2" required placeholder="Escribe tu mensaje..." maxlength="20" oninput="actualizarContador()"></textarea>
+                    <span id="contadorCaracteres" class="counter">20 / 20</span>
                 </div>
 
                 <!-- CAPTCHA Matemático Simple -->
@@ -164,7 +177,7 @@
                 </div>
 
                 <button type="submit" class="btn-whatsapp">
-                     Enviar por WhatsApp
+                    Enviar por WhatsApp
                 </button>
             </form>
         </div>
@@ -176,6 +189,14 @@
     </div>
 
     <script>
+        // Contador en tiempo real para los comentarios
+        function actualizarContador() {
+            const comentario = document.getElementById('comentario');
+            const contador = document.getElementById('contadorCaracteres');
+            const restantes = 20 - comentario.value.length;
+            contador.innerText = restantes + " caracteres restantes";
+        }
+
         // Generar un CAPTCHA matemático aleatorio cada vez que se carga la página
         let num1 = Math.floor(Math.random() * 10) + 1;
         let num2 = Math.floor(Math.random() * 10) + 1;
@@ -188,7 +209,7 @@
             // Validar la respuesta del CAPTCHA
             const respuestaUsuario = parseInt(document.getElementById('captchaInput').value);
             if (respuestaUsuario !== respuestaCorrecta) {
-                alert(" El resultado del CAPTCHA es incorrecto. Inténtalo de nuevo.");
+                alert("El resultado del CAPTCHA es incorrecto. Inténtalo de nuevo.");
                 return;
             }
 
@@ -197,13 +218,13 @@
             const telefono = document.getElementById('telefono').value;
             const comentario = document.getElementById('comentario').value;
 
-            /// Número de WhatsApp configurado
+            // Número de WhatsApp configurado
             const tuNumeroWhatsApp = "527571520094"; 
 
             // Estructurar el mensaje
             const mensaje = "Hola, mi nombre es " + nombre + ". Mi teléfono es: " + telefono + ". Comentario: " + comentario;
 
-            // URL directa y segura con concatenación clásica para evitar errores de sintaxis en plantillas de texto
+            // URL directa para WhatsApp
             const urlWhatsApp = "https://wa.me/" + tuNumeroWhatsApp + "?text=" + encodeURIComponent(mensaje);
 
             // Abrir la ventana de WhatsApp
