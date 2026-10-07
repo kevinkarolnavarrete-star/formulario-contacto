@@ -108,6 +108,25 @@
             color: #000000 !important;
         }
 
+        /* Estilo para la tarjeta del clima de Open-Meteo */
+        .weather-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #dcdcdc;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weather-box span {
+            font-weight: bold;
+            color: #667eea;
+        }
+
         .btn-whatsapp {
             background-color: #25d366;
             color: white !important;
@@ -171,6 +190,11 @@
                     <span id="contadorComentario" class="counter">20 caracteres restantes</span>
                 </div>
 
+                <!-- Widget del Clima con Open-Meteo -->
+                <div class="weather-box" id="weatherWidget">
+                    <span>🌤️ Clima actual:</span> <span id="tempOutput">Cargando clima...</span>
+                </div>
+
                 <!-- CAPTCHA Matemático Simple -->
                 <div class="captcha-box">
                     <label for="captchaInput" id="captchaQuestion">Cargando...</label>
@@ -190,6 +214,20 @@
     </div>
 
     <script>
+        // Obtener el clima en tiempo real desde Open-Meteo
+        async function obtenerClima() {
+            try {
+                // Coordenadas de Tulcingo de Valle, Puebla
+                const respuesta = await fetch('https://api.open-meteo.com/v1/forecast?latitude=18.06&longitude=-98.39&current=temperature_2m');
+                const datos = await respuesta.json();
+                const temperatura = datos.current.temperature_2m;
+                document.getElementById('tempOutput').innerText = temperatura + " °C";
+            } catch (error) {
+                document.getElementById('tempOutput').innerText = "No disponible";
+            }
+        }
+        obtenerClima();
+
         // Contador en tiempo real para el Nombre
         function actualizarContadorNombre() {
             const nombre = document.getElementById('nombre');
@@ -240,18 +278,20 @@
             window.open(urlWhatsApp, '_blank');
         }
     </script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6abea8f1301d75344216d715/1k3sc7s97';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+
+    <!-- Start of Tawk.to Script -->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6abea8f1301d75344216d715/1k3sc7s97';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!-- End of Tawk.to Script -->
+
 </body>
 </html>
